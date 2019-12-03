@@ -135,7 +135,6 @@ class LifeModel {
 				board[i][j] = Math.random() >= 0.5;
 			}
 		}
-
 		notifyObservers();
 	}
 
@@ -155,7 +154,6 @@ class LifeModel {
 		observers.remove(o);
 	}
 
-	// Add parameter, same as one missing from update function
 	private void notifyObservers() {
 
 		for (LifeObserver o : observers) {

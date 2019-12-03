@@ -93,10 +93,12 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 		JPanel timePanel = new JPanel();
 		timePanel.setLayout(new GridLayout(3, 1));
 
+		JButton thresholdSetButton = new JButton("Set Thresholds");
 		JButton advanceButton = new JButton("Advance");
 		JButton toggleTimeButton = new JButton("Start / Stop");
 		JButton restartButton = new JButton("Restart");
 
+		timePanel.add(thresholdSetButton);
 		timePanel.add(advanceButton);
 		timePanel.add(toggleTimeButton);
 		timePanel.add(restartButton, BorderLayout.EAST);
@@ -109,6 +111,7 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 
 		randomButton.addActionListener(this);
 		torusButton.addActionListener(this);
+		thresholdSetButton.addActionListener(this);
 		advanceButton.addActionListener(this);
 		toggleTimeButton.addActionListener(this);
 		restartButton.addActionListener(this);
@@ -157,7 +160,7 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 
 		sizeLabel.setText("" + newSize);
 	}
-
+	
 	@Override
 	public void spotClicked(Spot spot) {
 
@@ -184,6 +187,9 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 
 			case "Restart":
 				fireEvent(new RestartEvent());
+				break;
+			case "Set Thresholds":
+				fireEvent(new ThresholdSetEvent());
 				break;
 			case "Advance":
 				fireEvent(new AdvanceEvent());

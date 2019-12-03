@@ -22,6 +22,11 @@ abstract class LifeViewEvent {
 		return false;
 	}
 
+	public boolean isThresholdSetEvent() {
+
+		return false;
+	}
+
 	public boolean isAdvanceEvent() {
 
 		return false;
@@ -59,6 +64,14 @@ class RandomEvent extends LifeViewEvent {
 class TorusEvent extends LifeViewEvent {
 
 	public boolean isTorusEvent() {
+
+		return true;
+	}
+}
+
+class ThresholdSetEvent extends LifeViewEvent {
+
+	public boolean isThresholdSetEvent() {
 
 		return true;
 	}
