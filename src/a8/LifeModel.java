@@ -138,6 +138,14 @@ class LifeModel {
 		notifyObservers();
 	}
 
+	void setThresholds(int[] newThresholds) {
+
+		lowBirthThreshold = newThresholds[0];
+		highBirthThreshold = newThresholds[1];
+		lowSurvivalThreshold = newThresholds[2];
+		highSurvivalThreshold = newThresholds[3];
+	}
+
 	void toggleTorusMode() {
 
 		torusMode = !torusMode;

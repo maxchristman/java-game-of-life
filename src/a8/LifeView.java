@@ -14,6 +14,10 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 	private JSpotBoard board;					// A JSpotBoard storing all of the cells
 	private JLabel sizeLabel;					// A JLabel with the current size
 	private List<LifeViewListener> listeners;	// The list of listeners of the view, which is just the controller
+	private JTextField lowBirthTextField;
+	private JTextField highBirthTextField;
+	private JTextField lowSurviveTextField;
+	private JTextField highSurviveTextField;
 
 	LifeView() {
 		setLayout(new BorderLayout());
@@ -59,28 +63,36 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 		JPanel lowBirthPanel = new JPanel();
 		lowBirthPanel.setLayout(new GridLayout(1, 2));
 		JLabel lowBirthLabel = new JLabel("Low birth threshold");
-		JTextField lowBirthTextField = new JTextField();
+		lowBirthTextField = new JTextField("3");
+		lowBirthTextField.addActionListener(this);
+		lowBirthTextField.setActionCommand("Set Thresholds");
 		lowBirthPanel.add(lowBirthLabel);
 		lowBirthPanel.add(lowBirthTextField);
 
 		JPanel highBirthPanel = new JPanel();
 		highBirthPanel.setLayout(new GridLayout(1, 2));
 		JLabel highBirthLabel = new JLabel("High birth threshold");
-		JTextField highBirthTextField = new JTextField();
+		highBirthTextField = new JTextField("3");
+		highBirthTextField.addActionListener(this);
+		highBirthTextField.setActionCommand("Set Thresholds");
 		highBirthPanel.add(highBirthLabel);
 		highBirthPanel.add(highBirthTextField);
 
 		JPanel lowSurvivePanel = new JPanel();
 		lowSurvivePanel.setLayout(new GridLayout(1, 2));
 		JLabel lowSurviveLabel = new JLabel("Low survive threshold");
-		JTextField lowSurviveTextField = new JTextField();
+		lowSurviveTextField = new JTextField("2");
+		lowSurviveTextField.addActionListener(this);
+		lowSurviveTextField.setActionCommand("Set Thresholds");
 		lowSurvivePanel.add(lowSurviveLabel);
 		lowSurvivePanel.add(lowSurviveTextField);
 
 		JPanel highSurvivePanel = new JPanel();
 		highSurvivePanel.setLayout(new GridLayout(1, 2));
 		JLabel highSurviveLabel = new JLabel("High survive threshold");
-		JTextField highSurviveTextField = new JTextField();
+		highSurviveTextField = new JTextField("3");
+		highSurviveTextField.addActionListener(this);
+		highSurviveTextField.setActionCommand("Set Thresholds");
 		highSurvivePanel.add(highSurviveLabel);
 		highSurvivePanel.add(highSurviveTextField);
 
@@ -93,12 +105,10 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 		JPanel timePanel = new JPanel();
 		timePanel.setLayout(new GridLayout(3, 1));
 
-		JButton thresholdSetButton = new JButton("Set Thresholds");
 		JButton advanceButton = new JButton("Advance");
 		JButton toggleTimeButton = new JButton("Start / Stop");
 		JButton restartButton = new JButton("Restart");
 
-		timePanel.add(thresholdSetButton);
 		timePanel.add(advanceButton);
 		timePanel.add(toggleTimeButton);
 		timePanel.add(restartButton, BorderLayout.EAST);
@@ -111,7 +121,6 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 
 		randomButton.addActionListener(this);
 		torusButton.addActionListener(this);
-		thresholdSetButton.addActionListener(this);
 		advanceButton.addActionListener(this);
 		toggleTimeButton.addActionListener(this);
 		restartButton.addActionListener(this);
@@ -124,7 +133,6 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 		listeners = new ArrayList<>();
 	}
 
-	// WARNING: THIS METHOD IS CURSED
 	void setBoard(boolean[][] boolBoard) {
 
 		boolean mismatch = !(boolBoard.length == board.getSpotHeight());
@@ -160,7 +168,7 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 
 		sizeLabel.setText("" + newSize);
 	}
-	
+
 	@Override
 	public void spotClicked(Spot spot) {
 
@@ -188,10 +196,11 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 			case "Restart":
 				fireEvent(new RestartEvent());
 				break;
-			case "Set Thresholds":
-				fireEvent(new ThresholdSetEvent());
-				break;
 			case "Advance":
+				fireEvent(new ThresholdSetEvent(Integer.parseInt(lowBirthTextField.getText()),
+						Integer.parseInt(highBirthTextField.getText()),
+						Integer.parseInt(lowSurviveTextField.getText()),
+						Integer.parseInt(highSurviveTextField.getText())));
 				fireEvent(new AdvanceEvent());
 				break;
 			case "Start / Stop":
@@ -203,10 +212,16 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 			case "Torus Mode":
 				fireEvent(new TorusEvent());
 				break;
+			case "Set Thresholds":
+				fireEvent(new ThresholdSetEvent(Integer.parseInt(lowBirthTextField.getText()),
+						Integer.parseInt(highBirthTextField.getText()),
+						Integer.parseInt(lowSurviveTextField.getText()),
+						Integer.parseInt(highSurviveTextField.getText())));
+				break;
 		}
 	}
 
-	public void addLifeViewListener(LifeViewListener l) {
+	void addLifeViewListener(LifeViewListener l) {
 
 		listeners.add(l);
 	}

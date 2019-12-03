@@ -30,10 +30,10 @@ public class LifeController implements LifeObserver, LifeViewListener {
 			model.toggleTorusMode();
 
 		} else if (e.isThresholdSetEvent()) {
+			ThresholdSetEvent te = (ThresholdSetEvent) e;
+			model.setThresholds(te.getThresholds());
 
-		}
-
-		else if (e.isAdvanceEvent()) {
+		} else if (e.isAdvanceEvent()) {
 			model.advance();
 
 		} else if (e.isTimeToggleEvent()) {

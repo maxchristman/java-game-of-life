@@ -71,6 +71,24 @@ class TorusEvent extends LifeViewEvent {
 
 class ThresholdSetEvent extends LifeViewEvent {
 
+	private int lowBirthThreshold;
+	private int highBirthThreshold;
+	private int lowSurvivalThreshold;
+	private int highSurvivalThreshold;
+
+	ThresholdSetEvent(int lowBirthThreshold, int highBirthThreshold, int lowSurvivalThreshold, int highSurvivalThreshold) {
+
+		this.lowBirthThreshold = lowBirthThreshold;
+		this.highBirthThreshold = highBirthThreshold;
+		this.lowSurvivalThreshold = lowSurvivalThreshold;
+		this.highSurvivalThreshold = highSurvivalThreshold;
+	}
+
+	public int[] getThresholds() {
+
+		return new int[] {lowBirthThreshold, highBirthThreshold, lowSurvivalThreshold, highSurvivalThreshold};
+	}
+
 	public boolean isThresholdSetEvent() {
 
 		return true;
