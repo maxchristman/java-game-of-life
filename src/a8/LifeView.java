@@ -20,7 +20,7 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 	private JTextField highSurviveTextField;
 
 	private boolean running = false;
-	private int sleepInterval = 300;
+	private int sleepInterval = 10;
 
 	LifeView() {
 		setLayout(new BorderLayout());
@@ -38,10 +38,12 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 		sizePanel.setLayout(new BorderLayout());
 
 		sizeLabel = new JLabel("10");
+		JLabel sliderNameLabel = new JLabel("Board Size: ");
 		JSlider sizeSlider = new JSlider(10, 500, 10);
 		sizeSlider.addChangeListener(this);
 		sizePanel.add(sizeLabel, BorderLayout.EAST);
-		sizePanel.add(sizeSlider, BorderLayout.WEST);
+		sizePanel.add(sizeSlider, BorderLayout.CENTER);
+		sizePanel.add(sliderNameLabel, BorderLayout.WEST);
 		bottomPanel.add(sizePanel, BorderLayout.WEST);
 		bottomPanel.add(message, BorderLayout.EAST);
 
@@ -106,15 +108,23 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 		sidePanel.add(thresholdPanel, BorderLayout.CENTER);
 
 		JPanel timePanel = new JPanel();
-		timePanel.setLayout(new GridLayout(3, 1));
+		timePanel.setLayout(new GridLayout(4, 1));
 
 		JButton advanceButton = new JButton("Advance");
 		JButton toggleTimeButton = new JButton("Start / Stop");
 		JButton restartButton = new JButton("Restart");
+		JPanel delayPanel = new JPanel();
+		delayPanel.setLayout(new GridLayout(2, 0));
+		JLabel delayLabel = new JLabel("Delay");
+		JSlider delaySlider = new JSlider(10, 1000, 10);
+		delayPanel.add(delayLabel);
+		delayPanel.add(delaySlider);
+		delaySlider.addChangeListener(this);
 
 		timePanel.add(advanceButton);
 		timePanel.add(toggleTimeButton);
 		timePanel.add(restartButton, BorderLayout.EAST);
+		timePanel.add(delayPanel);
 
 		sidePanel.add(timePanel, BorderLayout.SOUTH);
 
@@ -226,6 +236,11 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 		}
 	}
 
+	public void setDelay(int newDelay) {
+
+		sleepInterval = newDelay;
+	}
+
 	public void run() {
 
 		while (running) {
@@ -262,9 +277,13 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 	public void stateChanged(ChangeEvent e) {
 
 		JSlider slider = (JSlider) e.getSource();
+
+		int max = slider.getMaximum();
 		// If you have stopped dragging a slider, fire a new SliderChangedEvent
-		if (!slider.getValueIsAdjusting()) {
-			fireEvent(new SliderChangedEvent(slider.getValue()));
+		if (!slider.getValueIsAdjusting() && max == 500) {
+			fireEvent(new SliderChangedEvent(slider.getValue(), true));
+		} else if (!slider.getValueIsAdjusting() && max == 1000) {
+			fireEvent(new SliderChangedEvent(slider.getValue(), false));
 		}
 	}
 }

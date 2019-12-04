@@ -122,15 +122,22 @@ class RestartEvent extends LifeViewEvent {
 class SliderChangedEvent extends LifeViewEvent {
 
 	private int sliderValue;
+	private boolean isSizeSlider;
 
-	SliderChangedEvent(int sliderValue) {
+	SliderChangedEvent(int sliderValue, boolean isSizeSlider) {
 
 		this.sliderValue = sliderValue;
+		this.isSizeSlider = isSizeSlider;
 	}
 
 	public int getSliderValue() {
 
 		return sliderValue;
+	}
+
+	public boolean getIsSizeSlider() {
+
+		return isSizeSlider;
 	}
 
 	public boolean isSliderChangedEvent() {

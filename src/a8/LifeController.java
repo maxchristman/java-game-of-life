@@ -36,17 +36,19 @@ public class LifeController implements LifeObserver, LifeViewListener {
 		} else if (e.isAdvanceEvent()) {
 			model.advance();
 
-		} else if (e.isTimeToggleEvent()) {
-
-			model.run();
-			// Tell the model to toggle whether or not the game runs automatically
 		} else if (e.isRestartEvent()) {
 
 			model.resetBoard();
 		} else if (e.isSliderChangedEvent()) {
 
 			SliderChangedEvent se = (SliderChangedEvent) e;
-			model.setBoardSize(se.getSliderValue());
+
+			if (se.getIsSizeSlider()) {
+				model.setBoardSize(se.getSliderValue());
+			} else {
+
+				view.setDelay(se.getSliderValue());
+			}
 
 		} else if (e.isSpotClickedEvent()) {
 
