@@ -4,8 +4,8 @@ package a8;
 Contains the major types of button and slider type events:
 1. RandomEvent
 2. TorusEvent
-3. AdvanceEvent
-4. TimeToggleEvent
+3. ThresholdSetEvent
+4. AdvanceEvent
 5. RestartEvent
 6. SliderChangeEvent
 7. SpotClickedEvent
@@ -28,11 +28,6 @@ abstract class LifeViewEvent {
 	}
 
 	public boolean isAdvanceEvent() {
-
-		return false;
-	}
-
-	public boolean isTimeToggleEvent() {
 
 		return false;
 	}
@@ -76,15 +71,15 @@ class ThresholdSetEvent extends LifeViewEvent {
 	private int lowSurvivalThreshold;
 	private int highSurvivalThreshold;
 
-	ThresholdSetEvent(int lowBirthThreshold, int highBirthThreshold, int lowSurvivalThreshold, int highSurvivalThreshold) {
+	ThresholdSetEvent(int[] thresholds) {
 
-		this.lowBirthThreshold = lowBirthThreshold;
-		this.highBirthThreshold = highBirthThreshold;
-		this.lowSurvivalThreshold = lowSurvivalThreshold;
-		this.highSurvivalThreshold = highSurvivalThreshold;
+		this.lowBirthThreshold = thresholds[0];
+		this.highBirthThreshold = thresholds[1];
+		this.lowSurvivalThreshold = thresholds[2];
+		this.highSurvivalThreshold = thresholds[3];
 	}
 
-	public int[] getThresholds() {
+	int[] getThresholds() {
 
 		return new int[] {lowBirthThreshold, highBirthThreshold, lowSurvivalThreshold, highSurvivalThreshold};
 	}
@@ -103,14 +98,6 @@ class AdvanceEvent extends LifeViewEvent {
 	}
 }
 
-class TimeToggleEvent extends LifeViewEvent {
-
-	public boolean isTimeToggleEvent() {
-
-		return true;
-	}
-}
-
 class RestartEvent extends LifeViewEvent {
 
 	public boolean isRestartEvent() {
@@ -122,6 +109,7 @@ class RestartEvent extends LifeViewEvent {
 class SliderChangedEvent extends LifeViewEvent {
 
 	private int sliderValue;
+	// True if the slider changed was the size slider, false if it was the delay slider
 	private boolean isSizeSlider;
 
 	SliderChangedEvent(int sliderValue, boolean isSizeSlider) {
@@ -130,12 +118,12 @@ class SliderChangedEvent extends LifeViewEvent {
 		this.isSizeSlider = isSizeSlider;
 	}
 
-	public int getSliderValue() {
+	int getSliderValue() {
 
 		return sliderValue;
 	}
 
-	public boolean getIsSizeSlider() {
+	boolean getIsSizeSlider() {
 
 		return isSizeSlider;
 	}
@@ -155,7 +143,7 @@ class SpotClickedEvent extends LifeViewEvent {
 		this.coordsClicked = coordsClicked;
 	}
 
-	public int[] getCoordsClicked() {
+	int[] getCoordsClicked() {
 
 		return coordsClicked;
 	}

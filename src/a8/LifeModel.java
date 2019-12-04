@@ -3,7 +3,7 @@ package a8;
 import java.util.ArrayList;
 import java.util.List;
 
-class LifeModel implements Runnable {
+class LifeModel {
 
 	private int lowBirthThreshold;				// The minimum number of alive neighbors for a cell to be born
 	private int highBirthThreshold;				// The maximum number of alive neighbors for a cell to be born
@@ -11,7 +11,6 @@ class LifeModel implements Runnable {
 	private int highSurvivalThreshold;			// The maximum number of alive neighbors for a cell to survive
 
 	private boolean torusMode;					// When true, the sides of the board are stitched together
-	private int updateDelay;					// The delay in milliseconds between cell updates
 
 	private boolean[][] board;					// Encapsulates alive spots in a boolean double array
 	private int boardSize;						// The current size of the board
@@ -28,17 +27,11 @@ class LifeModel implements Runnable {
 		highSurvivalThreshold = 3;
 
 		torusMode = false;
-		updateDelay = 10;
 
 		boardSize = 10;
 		observers = new ArrayList<>();
 
 		resetBoard();
-	}
-
-	boolean[][] getBoard() {
-
-		return board;
 	}
 
 	// Toggles the spot at the given coordinates
@@ -47,13 +40,14 @@ class LifeModel implements Runnable {
 		notifyObservers();
 	}
 
+	// Changes the size of the model board
 	void setBoardSize(int newSize) {
 
 		boardSize = newSize;
 		resetBoard();
 	}
 
-	// Update the board state based on the given death and survival rules
+	// Update the board state based on the given death and survival rules and if torus mode is activated or not
 	void advance() {
 
 		boolean[][] newBoard = new boolean[boardSize][boardSize];
@@ -163,12 +157,13 @@ class LifeModel implements Runnable {
 
 			for (int j = 0; j < boardSize; j++) {
 
-				board[i][j] = Math.random() >= 0.5;
+				board[i][j] = (Math.random() >= 0.5);
 			}
 		}
 		notifyObservers();
 	}
 
+	// Sets the threshold values; run upon advancing the game
 	void setThresholds(int[] newThresholds) {
 
 		lowBirthThreshold = newThresholds[0];
@@ -180,7 +175,6 @@ class LifeModel implements Runnable {
 	void toggleTorusMode() {
 
 		torusMode = !torusMode;
-		System.out.println(torusMode);
 		notifyObservers();
 	}
 
@@ -189,21 +183,11 @@ class LifeModel implements Runnable {
 		observers.add(o);
 	}
 
-	void removeObserver(LifeObserver o) {
-
-		observers.remove(o);
-	}
-
 	private void notifyObservers() {
 
 		for (LifeObserver o : observers) {
 
 			o.update(board);
 		}
-	}
-
-	@Override
-	public void run() {
-
 	}
 }

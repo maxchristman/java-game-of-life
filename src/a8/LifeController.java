@@ -38,6 +38,11 @@ public class LifeController implements LifeObserver, LifeViewListener {
 
 		} else if (e.isRestartEvent()) {
 
+			if (view.getRunning()) {
+
+				view.setRunning(false);
+			}
+
 			model.resetBoard();
 		} else if (e.isSliderChangedEvent()) {
 

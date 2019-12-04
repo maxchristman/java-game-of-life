@@ -6,6 +6,8 @@ public class Main {
 
 	public static void main(String[] args) {
 
+		// Follows the boilerplate of lecture 17
+
 		LifeModel lifeModel = new LifeModel();
 		LifeView lifeView = new LifeView();
 		LifeController lifeController = new LifeController(lifeModel, lifeView);

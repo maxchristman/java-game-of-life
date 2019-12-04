@@ -146,8 +146,19 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 		listeners = new ArrayList<>();
 	}
 
+	boolean getRunning() {
+
+		return running;
+	}
+
+	void setRunning(boolean b) {
+
+		running = b;
+	}
+
 	void setBoard(boolean[][] boolBoard) {
 
+		// If setBoard was called after the board size was changed
 		boolean mismatch = !(boolBoard.length == board.getSpotHeight());
 
 		// Makes a new one of new size if boolBoard and board don't match
@@ -210,10 +221,7 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 				fireEvent(new RestartEvent());
 				break;
 			case "Advance":
-				fireEvent(new ThresholdSetEvent(Integer.parseInt(lowBirthTextField.getText()),
-						Integer.parseInt(highBirthTextField.getText()),
-						Integer.parseInt(lowSurviveTextField.getText()),
-						Integer.parseInt(highSurviveTextField.getText())));
+				updateThresholds();
 				fireEvent(new AdvanceEvent());
 				break;
 			case "Start / Stop":
@@ -236,15 +244,18 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 		}
 	}
 
-	public void setDelay(int newDelay) {
+	void setDelay(int newDelay) {
 
 		sleepInterval = newDelay;
 	}
 
+	// Runs when start is clicked and it wasn't already running
 	public void run() {
 
 		while (running) {
 
+			// Checks for changed threshold values and advanced every time step
+			updateThresholds();
 			fireEvent(new AdvanceEvent());
 
 			try {
@@ -260,16 +271,43 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 		listeners.add(l);
 	}
 
-	public void removeLifeViewListener(LifeViewListener l) {
-
-		listeners.remove(l);
-	}
-
-	public void fireEvent(LifeViewEvent e) {
+	private void fireEvent(LifeViewEvent e) {
 
 		for (LifeViewListener l : listeners) {
 
 			l.handleLifeViewEvent(e);
+		}
+	}
+
+	// Helper method to update the thresholds
+	private void updateThresholds() {
+
+		boolean invalidInput = false;
+
+		String[] stringThresholds = new String[]{
+				lowBirthTextField.getText(),
+				highBirthTextField.getText(),
+				lowSurviveTextField.getText(),
+				highSurviveTextField.getText()};
+
+		// Prevents thresholds from updating when the box is empty or is not a number
+		for (String s : stringThresholds) {
+
+			try {
+				Integer.parseInt(s);
+			} catch (NumberFormatException e) {
+				invalidInput = true;
+			}
+		}
+
+		if (!invalidInput) {
+
+			int[] thresholds = new int[]{Integer.parseInt(lowBirthTextField.getText()),
+					Integer.parseInt(highBirthTextField.getText()),
+					Integer.parseInt(lowSurviveTextField.getText()),
+					Integer.parseInt(highSurviveTextField.getText())};
+
+			fireEvent(new ThresholdSetEvent(thresholds));
 		}
 	}
 
@@ -278,6 +316,7 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 
 		JSlider slider = (JSlider) e.getSource();
 
+		// Determines which slider was changed based on its maximum value
 		int max = slider.getMaximum();
 		// If you have stopped dragging a slider, fire a new SliderChangedEvent
 		if (!slider.getValueIsAdjusting() && max == 500) {
