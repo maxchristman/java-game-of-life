@@ -91,29 +91,25 @@ class LifeModel {
 						}
 					}
 				} else {
-
 					// For each possible direction from a particular spot
 					for (int[] directionVector : directionVectors) {
 
-						int[] oneStepCoords = new int[]{i, j};
+						int[] oneStepCoords = new int[]{i + directionVector[0], j + directionVector[1]};
 
-						// If you go past the length
-						if (i + directionVector[0] >= boardSize) {
-
+						// If the original spot is on the right edge
+						if (oneStepCoords[0] >= boardSize) {
 							oneStepCoords[0] = 0;
-							// If you go before x=0
-						} if (i + directionVector[0] < 0) {
 
+							// If the original spot is on the left edge
+						} if (oneStepCoords[0] < 0) {
 							oneStepCoords[0] = boardSize - 1;
-							// If you go past the height
-						} if (j + directionVector[1] >= boardSize) {
 
-							oneStepCoords[0] = i;
+							// If the original spot is on the bottom edge
+						} if (oneStepCoords[1] >= boardSize) {
 							oneStepCoords[1] = 0;
-							// If you go before y = 0
-						} if (j + directionVector[1] < 0) {
 
-							oneStepCoords[0] = i;
+							// If the original spot is on the top edge
+						} if (oneStepCoords[1] < 0) {
 							oneStepCoords[1] = boardSize - 1;
 						}
 
@@ -123,6 +119,7 @@ class LifeModel {
 						}
 					}
 				}
+
 				if (alive) {
 
 					// If there is overpopulation or underpopulation, make the alive cell dead on the new board
@@ -183,7 +180,7 @@ class LifeModel {
 	void toggleTorusMode() {
 
 		torusMode = !torusMode;
-		System.out.println("Torus mode: " + torusMode);
+		System.out.println(torusMode);
 		notifyObservers();
 	}
 
