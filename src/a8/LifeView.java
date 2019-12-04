@@ -57,7 +57,7 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 		booleanPanel.setLayout(new BorderLayout());
 
 		JButton randomButton = new JButton("Random");
-		JButton torusButton = new JButton("Toggle Torus Mode");
+		JToggleButton torusButton = new JToggleButton("Toggle Torus Mode");
 		booleanPanel.add(randomButton, BorderLayout.NORTH);
 		booleanPanel.add(torusButton, BorderLayout.SOUTH);
 		sidePanel.add(booleanPanel, BorderLayout.NORTH);
@@ -111,7 +111,7 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 		timePanel.setLayout(new GridLayout(4, 1));
 
 		JButton advanceButton = new JButton("Advance");
-		JButton toggleTimeButton = new JButton("Start / Stop");
+		JToggleButton toggleTimeButton = new JToggleButton("Start / Stop");
 		JButton restartButton = new JButton("Restart");
 		JPanel delayPanel = new JPanel();
 		delayPanel.setLayout(new GridLayout(2, 0));
