@@ -70,25 +70,59 @@ class LifeModel {
 				boolean alive = board[i][j];
 				int liveNeighbors = 0;
 
-				// For the step in every direction from a current spot
-				for (int[] directionVector : directionVectors) {
+				if (!torusMode) {
 
-					// If the spot in that direction is not in bounds, continue to the next spot
-					if (i + directionVector[0] >= boardSize
-							|| j + directionVector[1] >= boardSize
-							|| i + directionVector[0] < 0
-							|| j + directionVector[1] < 0) {
+					// For the step in every direction from a current spot
+					for (int[] directionVector : directionVectors) {
 
-						continue;
+						// If the spot in that direction is not in bounds, continue to the next spot
+						if (i + directionVector[0] >= boardSize
+								|| j + directionVector[1] >= boardSize
+								|| i + directionVector[0] < 0
+								|| j + directionVector[1] < 0) {
+
+							continue;
+						}
+
+						// If the spot in that direction is alive, add one to liveNeighbors
+						if (board[i + directionVector[0]][j + directionVector[1]]) {
+
+							liveNeighbors++;
+						}
 					}
+				} else {
 
-					// If the spot in that direction is alive, add one to liveNeighbors
-					if (board[i + directionVector[0]][j + directionVector[1]]) {
+					// For each possible direction from a particular spot
+					for (int[] directionVector : directionVectors) {
 
-						liveNeighbors++;
+						int[] oneStepCoords = new int[]{i, j};
+
+						// If you go past the length
+						if (i + directionVector[0] >= boardSize) {
+
+							oneStepCoords[0] = 0;
+							// If you go before x=0
+						} if (i + directionVector[0] < 0) {
+
+							oneStepCoords[0] = boardSize - 1;
+							// If you go past the height
+						} if (j + directionVector[1] >= boardSize) {
+
+							oneStepCoords[0] = i;
+							oneStepCoords[1] = 0;
+							// If you go before y = 0
+						} if (j + directionVector[1] < 0) {
+
+							oneStepCoords[0] = i;
+							oneStepCoords[1] = boardSize - 1;
+						}
+
+						if (board[oneStepCoords[0]][oneStepCoords[1]]) {
+
+							liveNeighbors++;
+						}
 					}
 				}
-
 				if (alive) {
 
 					// If there is overpopulation or underpopulation, make the alive cell dead on the new board
@@ -149,6 +183,7 @@ class LifeModel {
 	void toggleTorusMode() {
 
 		torusMode = !torusMode;
+		System.out.println("Torus mode: " + torusMode);
 		notifyObservers();
 	}
 

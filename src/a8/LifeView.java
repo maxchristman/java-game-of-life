@@ -212,12 +212,6 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 			case "Torus Mode":
 				fireEvent(new TorusEvent());
 				break;
-			case "Set Thresholds":
-				fireEvent(new ThresholdSetEvent(Integer.parseInt(lowBirthTextField.getText()),
-						Integer.parseInt(highBirthTextField.getText()),
-						Integer.parseInt(lowSurviveTextField.getText()),
-						Integer.parseInt(highSurviveTextField.getText())));
-				break;
 		}
 	}
 
