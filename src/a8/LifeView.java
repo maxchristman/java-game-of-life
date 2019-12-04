@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LifeView extends JPanel implements ActionListener, SpotListener, ChangeListener {
+public class LifeView extends JPanel implements ActionListener, SpotListener, ChangeListener, Runnable{
 
 	private JSpotBoard board;					// A JSpotBoard storing all of the cells
 	private JLabel sizeLabel;					// A JLabel with the current size
@@ -18,6 +18,9 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 	private JTextField highBirthTextField;
 	private JTextField lowSurviveTextField;
 	private JTextField highSurviveTextField;
+
+	private boolean running = false;
+	private int sleepInterval = 300;
 
 	LifeView() {
 		setLayout(new BorderLayout());
@@ -52,7 +55,7 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 		booleanPanel.setLayout(new BorderLayout());
 
 		JButton randomButton = new JButton("Random");
-		JButton torusButton = new JButton("Torus Mode");
+		JButton torusButton = new JButton("Toggle Torus Mode");
 		booleanPanel.add(randomButton, BorderLayout.NORTH);
 		booleanPanel.add(torusButton, BorderLayout.SOUTH);
 		sidePanel.add(booleanPanel, BorderLayout.NORTH);
@@ -204,14 +207,36 @@ public class LifeView extends JPanel implements ActionListener, SpotListener, Ch
 				fireEvent(new AdvanceEvent());
 				break;
 			case "Start / Stop":
-				fireEvent(new TimeToggleEvent());
+				if (!running) {
+
+					running = true;
+					(new Thread(this)).start();
+
+				} else {
+
+					running = false;
+				}
 				break;
 			case "Random":
 				fireEvent(new RandomEvent());
 				break;
-			case "Torus Mode":
+			case "Toggle Torus Mode":
 				fireEvent(new TorusEvent());
 				break;
+		}
+	}
+
+	public void run() {
+
+		while (running) {
+
+			fireEvent(new AdvanceEvent());
+
+			try {
+				Thread.sleep(sleepInterval);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

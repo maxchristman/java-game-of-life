@@ -38,6 +38,7 @@ public class LifeController implements LifeObserver, LifeViewListener {
 
 		} else if (e.isTimeToggleEvent()) {
 
+			model.run();
 			// Tell the model to toggle whether or not the game runs automatically
 		} else if (e.isRestartEvent()) {
 

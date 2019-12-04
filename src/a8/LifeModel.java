@@ -3,7 +3,7 @@ package a8;
 import java.util.ArrayList;
 import java.util.List;
 
-class LifeModel {
+class LifeModel implements Runnable {
 
 	private int lowBirthThreshold;				// The minimum number of alive neighbors for a cell to be born
 	private int highBirthThreshold;				// The maximum number of alive neighbors for a cell to be born
@@ -200,5 +200,10 @@ class LifeModel {
 
 			o.update(board);
 		}
+	}
+
+	@Override
+	public void run() {
+
 	}
 }
